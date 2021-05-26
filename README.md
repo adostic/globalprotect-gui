@@ -26,3 +26,16 @@ Type=Application
 Exec=[PATH_TO_REPO]/globalprotect-gui.py
 X-GNOME-Autostart-Delay=60
 ```
+# Preview
+
+### Connected:
+![Connected](images/connected.png)
+
+### Disconnected:
+![Disconnected](images/disconnected.png)
+
+### Dropdown:
+![Dropdown](images/dropdown.png)
+
+### Connecting:
+![Connecting](images/connecting.png)
