@@ -5,6 +5,13 @@ globalprotect VPN connection.
 
 ## Installation
 
+Required before starting script:
+```
+pip3 install pgi
+sudo apt install gir1.2-appindicator3
+sudo apt install xterm
+```
+
 Clone this repo and run globalprotect-gui.py and tray icon will appear.
 
 To run this on start you can setup  ~/.config/autostart/*.desktop (the XDG Autostart specification), 
@@ -17,4 +24,5 @@ with content:
 Name=GlobalProtectGUI
 Type=Application
 Exec=[PATH_TO_REPO]/globalprotect-gui.py
+X-GNOME-Autostart-Delay=60
 ```

@@ -10,6 +10,7 @@ gi.require_version('AppIndicator3', '0.1')
 from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
 
 lock = threading.Lock()
+monitor_status = False
 
 
 def run_continuously(indicator, interval=3):
@@ -19,7 +20,8 @@ def run_continuously(indicator, interval=3):
         @classmethod
         def run(cls):
             while not cease_continuous_run.is_set():
-                set_icon_thread_function(indicator)
+                if monitor_status:
+                    set_icon_thread_function(indicator)
                 time.sleep(interval)
 
     continuous_thread = ScheduleThread()
@@ -33,6 +35,10 @@ def main():
                                            os.path.join(sys.path[0], "network-vpn-no-route-symbolic-red.svg"),
                                            appindicator.IndicatorCategory.APPLICATION_STATUS)
     indicator.set_status(appindicator.IndicatorStatus.ACTIVE)
+    status = set_icon_thread_function(indicator)
+    if status:
+        global monitor_status
+        monitor_status = True
     cease_continuous_run = run_continuously(indicator)
 
     indicator.set_menu(menu())
@@ -41,7 +47,9 @@ def main():
 
 
 def set_icon_thread_function(indicator):
-    indicator.set_icon(get_gp_status())
+    status, icon = get_gp_status()
+    indicator.set_icon(icon)
+    return status
 
 
 def get_gp_status():
@@ -50,12 +58,16 @@ def get_gp_status():
     output = stream.read()
     lock.release()
     if output.find("Connected") != -1:
-        return os.path.join(sys.path[0], "network-vpn-symbolic-green.svg")
-    return os.path.join(sys.path[0], "network-vpn-no-route-symbolic-red.svg")
+        return True, os.path.join(sys.path[0], "network-vpn-symbolic-green.svg")
+    return False, os.path.join(sys.path[0], "network-vpn-no-route-symbolic-red.svg")
 
 
 def menu():
     menu = gtk.Menu()
+
+    command_monitor = gtk.MenuItem('Monitor')
+    command_monitor.connect('activate', monitor)
+    menu.append(command_monitor)
 
     command_connect = gtk.MenuItem('Connect')
     command_connect.connect('activate', connect)
@@ -68,7 +80,7 @@ def menu():
     command_details = gtk.MenuItem('Details')
     command_details.connect('activate', details)
     menu.append(command_details)
-    
+
     command_about = gtk.MenuItem('About')
     command_about.connect('activate', about)
     menu.append(command_about)
@@ -82,11 +94,18 @@ def menu():
     return menu
 
 
+def monitor(_):
+    global monitor_status
+    monitor_status = True
+
+
 def disconnect(_):
     run_command("globalprotect disconnect")
 
 
 def connect(_):
+    global monitor_status
+    monitor_status = True
     run_command('xterm -e globalprotect connect')
 
 
