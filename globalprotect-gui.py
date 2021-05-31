@@ -11,9 +11,10 @@ from gi.repository import Gtk as gtk, AppIndicator3 as appindicator
 
 lock = threading.Lock()
 monitor_status = False
+verbose = False
 
 
-def run_continuously(indicator, interval=3):
+def run_continuously(indicator, interval=1):
     cease_continuous_run = threading.Event()
 
     class ScheduleThread(threading.Thread):
@@ -52,14 +53,28 @@ def set_icon_thread_function(indicator):
     return status
 
 
+def log(output):
+    if verbose:
+        print(output)
+
+
 def get_gp_status():
-    lock.acquire()
-    stream = os.popen('globalprotect show --status')
-    output = stream.read()
-    lock.release()
-    if output.find("Connected") != -1:
+    if is_interface_up("gpd0"):
         return True, os.path.join(sys.path[0], "network-vpn-symbolic-green.svg")
     return False, os.path.join(sys.path[0], "network-vpn-no-route-symbolic-red.svg")
+
+
+def is_interface_up(interface):
+    content: str
+    try:
+        with open('/sys/class/net/' + interface + '/operstate') as f:
+            content = f.read()
+            if 'down' in content:
+                return False
+            else:
+                return True
+    except:
+        return False
 
 
 def menu():
@@ -130,4 +145,6 @@ def quit_trey(_):
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 0 and sys.argv[1] == '--verbose':
+        verbose = True
     main()

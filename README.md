@@ -29,13 +29,13 @@ X-GNOME-Autostart-Delay=60
 # Preview
 
 ### Connected:
-![Connected](images/connected.png)
+![Connected](docs/connected.png)
 
 ### Disconnected:
-![Disconnected](images/disconnected.png)
+![Disconnected](docs/disconnected.png)
 
 ### Dropdown:
-![Dropdown](images/dropdown.png)
+![Dropdown](docs/dropdown.png)
 
 ### Connecting:
-![Connecting](images/connecting.png)
+![Connecting](docs/connecting.png)
