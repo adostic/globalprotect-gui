@@ -8,6 +8,7 @@ globalprotect VPN connection.
 Required before starting script:
 ```
 pip3 install pgi
+sudo apt update
 sudo apt install gir1.2-appindicator3
 sudo apt install xterm
 ```
