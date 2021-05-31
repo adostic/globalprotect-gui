@@ -145,6 +145,6 @@ def quit_trey(_):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) > 0 and sys.argv[1] == '--verbose':
+    if len(sys.argv) > 1 and sys.argv[1] == '--verbose':
         verbose = True
     main()
