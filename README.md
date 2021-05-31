@@ -12,7 +12,7 @@ sudo apt install gir1.2-appindicator3
 sudo apt install xterm
 ```
 
-Clone this repo and run globalprotect-gui.py and tray icon will appear.
+Clone this repo and run `python3 globalprotect-gui.py` and tray icon will appear.
 
 To run this on start you can setup  ~/.config/autostart/*.desktop (the XDG Autostart specification), 
 or through ~/.xprofile (a regular shell script),
@@ -23,8 +23,7 @@ with content:
 [Desktop Entry]
 Name=GlobalProtectGUI
 Type=Application
-Exec=[PATH_TO_REPO]/globalprotect-gui.py
-X-GNOME-Autostart-Delay=60
+Exec=python3 [PATH_TO_REPO]/globalprotect-gui.py
 ```
 # Preview
 
